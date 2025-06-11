@@ -14,6 +14,9 @@ export const typeDefs = gql`
     displayName: String!
     countryCode: String
     countryName: String
+    possessivePronoun: String
+    objectivePronoun: String
+    subjectivePronoun: String
   }
 
   type Query {
