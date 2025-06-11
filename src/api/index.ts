@@ -10,6 +10,7 @@ export const typeDefs = gql`
     id: ID!
     givenName: String!
     familyName: String!
+    displayName: String!
   }
 
   type Query {
@@ -26,4 +27,9 @@ export const resolvers = {
       return Db.listAuthors();
     },
   },
+  Author: {
+    displayName: (author) => {
+      return [author.givenName, author.familyName].filter(Boolean).join(' ')
+    },
+  }
 };
