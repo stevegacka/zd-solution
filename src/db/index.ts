@@ -18,7 +18,18 @@ export class Db {
   }
 
   public listAuthors() {
-    return this.knex.table<Author>("authors").select("*").limit(10);
+    return this.knex
+        .table<Author>("authors")
+        .select("*")
+        .limit(10);
+  }
+
+  public findAuthorById(id: string) {
+    return this.knex
+        .table<Author>('authors')
+        .select('*')
+        .where('id', id)
+        .first();
   }
 }
 

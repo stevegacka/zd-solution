@@ -18,6 +18,7 @@ export const typeDefs = gql`
 
   type Query {
     authors: [Author!]!
+    author(id: ID!): Author
   }
 `;
 
@@ -29,6 +30,9 @@ export const resolvers = {
       // ✅ Solution 1
       return Db.listAuthors();
     },
+    author: (_, { id }) => {
+      return Db.findAuthorById(id)
+    }
   },
   Author: {
     displayName: (author) => {
