@@ -15,6 +15,9 @@ import axios from "axios";
  */
 interface Country {
   cca2: string; // 2-letter code https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+  name: {
+    common: string;
+  }
 }
 
 export default class Countries {
@@ -33,6 +36,17 @@ export default class Countries {
     );
 
     return data;
+  }
+
+  public async searchByCountryCode(countryCode: string): Promise<Country> {
+    const { data } = await this.restApi.get<Country[]> (
+        `/alpha/${encodeURIComponent(countryCode)}`
+    )
+
+    // The result is an array of Countries. Ensure country is the correct match.
+    const country = data ? data.find(c => c.cca2 === countryCode) : null;
+
+    return country;
   }
 
   // 🗺 Add your method(s) here

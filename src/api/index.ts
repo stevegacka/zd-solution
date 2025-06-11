@@ -4,6 +4,7 @@
 
 import { gql } from "graphql-tag";
 import Db from "../db";
+import Countries from "../lib/Countries";
 
 export const typeDefs = gql`
   type Author {
@@ -11,6 +12,8 @@ export const typeDefs = gql`
     givenName: String!
     familyName: String!
     displayName: String!
+    countryCode: String
+    countryName: String
   }
 
   type Query {
@@ -31,5 +34,16 @@ export const resolvers = {
     displayName: (author) => {
       return [author.givenName, author.familyName].filter(Boolean).join(' ')
     },
+    countryName: async (author) => {
+      if (author.countryCode) {
+        const countriesApi = new Countries()
+        const country = await countriesApi.searchByCountryCode(author.countryCode);
+        if (country) {
+          return country.name?.common;
+        }
+      }
+
+      return null
+    }
   }
 };
