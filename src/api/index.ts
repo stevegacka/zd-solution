@@ -18,10 +18,30 @@ export const typeDefs = gql`
     objectivePronoun: String
     subjectivePronoun: String
   }
+  
+  input UpsertAuthorInput {
+    id: ID
+    givenName: String!
+    familyName: String!
+    displayName: String
+    countryCode: String
+    countryName: String
+    possessivePronoun: String
+    objectivePronoun: String
+    subjectivePronoun: String
+  }
+  
+  type UpsertAuthorPayload {
+    author: Author
+  }
 
   type Query {
     authors: [Author!]!
     author(id: ID!): Author
+  }
+  
+  type Mutation {
+    upsertAuthor(input: UpsertAuthorInput!): UpsertAuthorPayload
   }
 `;
 
@@ -36,6 +56,21 @@ export const resolvers = {
     author: (_, { id }) => {
       return Db.findAuthorById(id)
     }
+  },
+  Mutation: {
+    upsertAuthor: async (_, { input }) => {
+      if (input.id) {
+        await Db.updateAuthorById(input.id, input);
+        return {
+          author: await Db.findAuthorById(input.id),
+        };
+      } else {
+        const [newAuthorId] = await Db.createAuthor(input);
+        return {
+          author: await Db.findAuthorById(newAuthorId),
+        };
+      }
+    },
   },
   Author: {
     displayName: (author) => {

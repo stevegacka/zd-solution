@@ -24,12 +24,25 @@ export class Db {
         .limit(10);
   }
 
-  public findAuthorById(id: string) {
+  public findAuthorById(id: string|number) {
     return this.knex
         .table<Author>('authors')
         .select('*')
         .where('id', id)
         .first();
+  }
+
+  public createAuthor(fields: Partial<Author>) {
+    return this.knex
+        .table<Author>('authors')
+        .insert(fields);
+  }
+
+  public updateAuthorById(id: string, fields: Partial<Author>) {
+    return this.knex
+        .table<Author>('authors')
+        .where('id', id)
+        .update(fields)
   }
 }
 
