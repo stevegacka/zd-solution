@@ -17,11 +17,15 @@ export class Db {
     this.knex = initKnex(config.development);
   }
 
-  public listAuthors() {
+  public listAuthors(options?: { page?: number, pageSize?: number }) {
+    const page = options?.page || 1;
+    const pageSize = options?.pageSize || 10;
+
     return this.knex
         .table<Author>("authors")
         .select("*")
-        .limit(10);
+        .offset((page - 1) * pageSize)
+        .limit(pageSize)
   }
 
   public findAuthorById(id: string|number) {

@@ -36,7 +36,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    authors: [Author!]!
+    authors(page: Int, pageSize: Int): [Author!]!
     author(id: ID!): Author
   }
   
@@ -47,11 +47,10 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    authors: () => {
-      // 🐞 Bug fix needed!
-      // We're not returning what's in DB 😱
-      // ✅ Solution 1
-      return Db.listAuthors();
+    authors: (_, args) => {
+      const page = args.page || 1;
+      const pageSize = args.pageSize || 5;
+      return Db.listAuthors({ page, pageSize });
     },
     author: (_, { id }) => {
       return Db.findAuthorById(id)
