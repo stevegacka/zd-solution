@@ -3,6 +3,7 @@
  */
 
 import { gql } from "graphql-tag";
+import Db from "../db";
 
 export const typeDefs = gql`
   type Author {
@@ -21,7 +22,8 @@ export const resolvers = {
     authors: () => {
       // 🐞 Bug fix needed!
       // We're not returning what's in DB 😱
-      return [];
+      // ✅ Solution 1
+      return Db.listAuthors();
     },
   },
 };
