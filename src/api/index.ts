@@ -32,7 +32,18 @@ export const resolvers = {
   },
   Author: {
     displayName: (author) => {
-      return [author.givenName, author.familyName].filter(Boolean).join(' ')
+      let displayName = null;
+
+      switch (author.countryCode) {
+        case 'JP':
+          displayName = [author.familyName, author.givenName].filter(Boolean).join(' ')
+          break;
+        default:
+          displayName = [author.givenName, author.familyName].filter(Boolean).join(' ')
+          break;
+      }
+
+      return displayName;
     },
     countryName: async (author) => {
       if (author.countryCode) {
